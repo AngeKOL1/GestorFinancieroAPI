@@ -28,6 +28,9 @@ public class WebSecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UserDetailsService jwtUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
+    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_USER = "USUARIO";
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -51,11 +54,11 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/usuarios/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/transacciones/**").hasAuthority("USUARIO")
-                        .requestMatchers(HttpMethod.POST, "/transacciones/**").hasAuthority("USUARIO")
-                        .requestMatchers(HttpMethod.POST, "/metas/*/metas/**").hasAuthority("USUARIO")
-                        .requestMatchers(HttpMethod.GET, "/metas/**").hasAuthority("USUARIO")
+                        .requestMatchers(HttpMethod.GET, "/usuarios/**").hasAuthority(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/transacciones/**").hasAuthority(ROLE_USER)
+                        .requestMatchers(HttpMethod.POST, "/transacciones/**").hasAuthority(ROLE_USER)
+                        .requestMatchers(HttpMethod.POST, "/metas/*/metas/**").hasAuthority(ROLE_USER)
+                        .requestMatchers(HttpMethod.GET, "/metas/**").hasAuthority(ROLE_USER)
                         .requestMatchers(HttpMethod.POST, "/usuarios/registro").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/meta/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/meta/misMetas/").authenticated()
